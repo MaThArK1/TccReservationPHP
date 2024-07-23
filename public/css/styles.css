@@ -24,3 +24,7 @@
     text-align: center; /* Centraliza o texto dentro dos itens */
     padding: 10px 0;
 }
+
+#center {
+    text-align: center;
+}

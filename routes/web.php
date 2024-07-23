@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\ReservationsController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'Home')->name('app-home');
@@ -19,4 +20,18 @@ Route::prefix('clients')->group(function() {
 
     Route::delete('/{id}', [ClientsController::class, 'destroy'])->where('id', '[0-9]+')->name('clients-destroy');
 
+});
+
+Route::prefix('reservations')->group(function() {
+    Route::get('/', [ReservationsController::class, 'index'])->name('reservations-index');
+
+    Route::get('/create', [ReservationsController::class, 'create'])->name('reservations-create');
+
+    Route::post('/', [ReservationsController::class, 'store'])->name('reservations-store');
+
+    Route::get('/{id}/edit', [ReservationsController::class, 'edit'])->where('id', '[0-9]+')->name('reservations-edit');
+
+    Route::put('/{id}', [ReservationsController::class, 'update'])->where('id', '[0-9]+')->name('reservations-update');
+
+    Route::delete('/{id}', [ReservationsController::class, 'destroy'])->where('id', '[0-9]+')->name('reservations-destroy');
 });
