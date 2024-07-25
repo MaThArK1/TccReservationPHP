@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <h1>Edição de reserva</h1>
     <hr>
-    <form action="{{ route('clients-update', ['id' => $client->id]) }}" method="POST">
+    <form action="{{ route('reservations-update', ['id' => $reservation->id]) }}" method="POST">
     @csrf
     @method('PUT')
         <div class="form-group">

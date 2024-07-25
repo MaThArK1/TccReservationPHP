@@ -31,9 +31,11 @@ class ReservationsController extends Controller
 
     public function edit($id) 
     {
+        $clients = Client::all();
+
        $selectedReservation = Reservation::where('id', $id)->first();
        if(empty(!$selectedReservation)) {
-        return view('reservations.edit', ['reservation'=> $selectedReservation]);
+        return view('reservations.edit', ['reservation'=> $selectedReservation, 'clients' => $clients]);
        } else {
         return redirect()->route('reservations-index');
        }
