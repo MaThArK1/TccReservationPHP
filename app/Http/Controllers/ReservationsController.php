@@ -24,8 +24,30 @@ class ReservationsController extends Controller
 
     public function store(Request $request) 
     {
-        Reservation::create($request->all());
+        $initDate = date('Y-m-d', strtotime($request->initDate));
+        $endDate = date('Y-m-d', strtotime($request->endDate));
 
+        $initDateTimestamp = date(strtotime($request->initDate));
+        $endDateTimestamp = date(strtotime($request->endDate));
+    
+        $reservationsOnTheSameInitDate = Reservation::whereDate('initDate', $initDate)->get();
+               // $reservationsOnTheSameEndDate = Reservation::whereDate('endDate', [$endDate])->get();
+
+        foreach ($reservationsOnTheSameInitDate as $reservationOnSameDate){
+            $reservationsInitDateTimestamp = strtotime($reservationOnSameDate->initDate);
+            $reservationsEndDateTimestamp = strtotime($reservationOnSameDate->endDate);
+
+            if ($initDateTimestamp > $reservationsInitDateTimestamp && $initDateTimestamp < $reservationsEndDateTimestamp
+            || $endDateTimestamp > $reservationsInitDateTimestamp && $endDateTimestamp < $reservationsEndDateTimestamp ) {
+               return back()->withErrors(['error' => 'Já existe uma reserva na data selecionada.'])->withInput();
+           }
+        }
+
+
+ 
+
+        Reservation::create($request->all());
+    
         return redirect()->route('reservations-index');
     }
 

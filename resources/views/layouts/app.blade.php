@@ -8,16 +8,27 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <title>@yield('title')</title>
 </head>
+
 <body>
-<div class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
             <div class="col-md-2">
                 @include('layouts.sidebar')
             </div>
             <div class="col-md-10">
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 @yield('content')
             </div>
         </div>
     </div>
 </body>
+
 </html>
