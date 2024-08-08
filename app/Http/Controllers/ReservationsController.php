@@ -24,30 +24,10 @@ class ReservationsController extends Controller
 
     public function store(Request $request)
     {
-        $initDate = date('Y-m-d', strtotime($request->initDate));
-        $endDate = date('Y-m-d', strtotime($request->endDate));
+        $initDate = $request->initDate;
+        $endDate = $request->endDate;
 
-        $initDateTimestamp = date(strtotime($request->initDate));
-        $endDateTimestamp = date(strtotime($request->endDate));
-
-        $reservationsOnTheDates = Reservation::whereDate('initDate', '>=', $initDate)
-        ->whereDate('endDate', '<=', $endDate)->get();
-
-        foreach ($reservationsOnTheDates as $reservation) {
-            $reservationsInitDateTimestamp = strtotime($reservation->initDate);
-            $reservationsEndDateTimestamp = strtotime($reservation->endDate);
-
-            $isInitDateOverlap = $initDateTimestamp > $reservationsInitDateTimestamp 
-            && $initDateTimestamp < $reservationsEndDateTimestamp;
-
-            $isEndDateOverlap = $endDateTimestamp > $reservationsInitDateTimestamp 
-            && $endDateTimestamp < $reservationsEndDateTimestamp;
-
-            if ($isInitDateOverlap || $isEndDateOverlap) {
-                return back()->withErrors(['error' => 'Já existe uma reserva na data selecionada.'])
-                ->withInput();
-            }
-        }
+        self::verifyIfReservationOverlaps($initDate, $endDate);
 
         Reservation::create($request->all());
 
@@ -68,6 +48,11 @@ class ReservationsController extends Controller
 
     public function update(Request $request, $id)
     {
+        $initDate = $request->initDate;
+        $endDate = $request->endDate;
+
+        self::verifyIfReservationOverlaps($initDate, $endDate, $id);
+
         $data = [
             'client_id' => $request->client_id,
             'initDate' => $request->initDate,
@@ -83,5 +68,37 @@ class ReservationsController extends Controller
     {
         Reservation::where('id', $id)->delete();
         return redirect()->route('reservations-index');
+    }
+
+    private function verifyIfReservationOverlaps ($initDate, $endDate, $id=null) 
+    {
+        $initDateYMD = date('Y-m-d', strtotime($initDate));
+        $endDateYMD = date('Y-m-d', strtotime($endDate));
+
+        $initDateTimestamp = date(strtotime($initDate));
+        $endDateTimestamp = date(strtotime($endDate));
+
+        $reservationsOnTheDates = Reservation::whereDate('initDate', '>=', $initDateYMD)
+        ->whereDate('endDate', '<=', $endDateYMD)
+        ->when(isset($id), function ($query) use ($id) {
+            return $query->where('id', '!=', $id);
+        })->get();
+
+
+        foreach ($reservationsOnTheDates as $reservation) {
+            $reservationsInitDateTimestamp = strtotime($reservation->initDate);
+            $reservationsEndDateTimestamp = strtotime($reservation->endDate);
+
+            $isInitDateOverlap = $initDateTimestamp >= $reservationsInitDateTimestamp 
+            && $initDateTimestamp <= $reservationsEndDateTimestamp;
+
+            $isEndDateOverlap = $endDateTimestamp > $reservationsInitDateTimestamp 
+            && $endDateTimestamp < $reservationsEndDateTimestamp;
+
+            if ($isInitDateOverlap || $isEndDateOverlap) {
+                return back()->withErrors(['error' => 'Já existe uma reserva na data selecionada.'])
+                ->withInput();
+            }
+        }
     }
 }
