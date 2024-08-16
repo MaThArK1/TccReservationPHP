@@ -6,19 +6,19 @@
             </svg>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="{{ route('app-home') }}">Home</a>
+            <a class="nav-link {{ Request::routeIs('app-home') ? 'active' : '' }}" href="{{ route('app-home') }}">Home</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('clients-create') }}">Cadastrar cliente</a>
+            <a class="nav-link {{ Request::routeIs('clients-create') ? 'active' : '' }}" href="{{ route('clients-create') }}">Cadastrar cliente</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('clients-index') }}">Listagem de clientes</a>
+            <a class="nav-link {{ Request::routeIs('clients-index') ? 'active' : '' }}" href="{{ route('clients-index') }}">Listagem de clientes</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('reservations-create') }}">Realizar reserva</a>
+            <a class="nav-link {{ Request::routeIs('reservations-create') ? 'active' : '' }}" href="{{ route('reservations-create') }}">Realizar reserva</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('reservations-index') }}">Listagem de reservas</a>
+            <a class="nav-link {{ Request::routeIs('reservations-index') ? 'active' : '' }}" href="{{ route('reservations-index') }}">Listagem de reservas</a>
         </li>
     </ul>
 </div>

@@ -13,9 +13,9 @@
             <div class="form-group">
                 <label for="client_id">Cliente:</label>
                 <select class="form-select" name ="client_id" aria-label="Default select example">
-                    <option selected>Escolha o cliente da reserva...</option>
+                    <option value="{{ $reservation->client->id }}" selected>{{ $reservation->client->name }}</option>
                     @foreach($clients as $client)
-                    <option value=" {{ $client->id}} ">{{ $client->name }}</option>
+                    <option value="{{ $client->id }}">{{ $client->name }}</option>
                     @endforeach
                 </select>
             </div>
