@@ -22,3 +22,7 @@ Projeto desenvolvido para defender o trabalho de conclusão de curso em bacharel
 - Laravel;
 - PHP 8.3.2;
 - MySql
+
+## Comandos para inicialização
+`php artisan migrate &&`
+`php artisan serve`
