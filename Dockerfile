@@ -31,7 +31,9 @@ WORKDIR /var/www/html
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Install project dependencies
-RUN composer install
+RUN --mount=type=bind,source=composer.json,target=/var/www/html/composer.json \
+    --mount=type=bind,source=composer.lock,target=/var/www/html/composer.lock \
+    composer install --no-dev --optimize-autoloader
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache

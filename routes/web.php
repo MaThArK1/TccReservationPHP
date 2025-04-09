@@ -4,7 +4,7 @@ use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\ReservationsController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'Home')->name('app-home');
+Route::view('/', 'home')->name('app-home');
 
 
 Route::prefix('clients')->group(function() {
