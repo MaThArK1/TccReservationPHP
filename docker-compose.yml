@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    env_file:
+      - .env
+    ports:
+      - "8000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    command: 
+      sh -c "php artisan migrate --force && apache2-foreground"
+  
+  db:
+    platform: "linux/amd64"
+    image: mysql:5.7
+    container_name: laravel_db
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "${DB_USERNAME}", "-p${DB_PASSWORD}"]
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  dbdata:
+
+networks:
+  agendadorNetwork:
+    driver: bridge
+
