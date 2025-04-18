@@ -21,7 +21,7 @@ Projeto desenvolvido para defender o trabalho de conclusão de curso em bacharel
 ## Tecnologias utilizadas
 - Laravel;
 - PHP 8.2;
-- MySQL 5.2
+- MySQL 5.7
 - Docker
 
 ## Comandos para inicialização
