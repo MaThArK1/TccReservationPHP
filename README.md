@@ -26,3 +26,5 @@ Projeto desenvolvido para defender o trabalho de conclusão de curso em bacharel
 ## Comandos para inicialização
 `php artisan migrate &&`
 `php artisan serve`
+ou
+`docker-compose up --build`
